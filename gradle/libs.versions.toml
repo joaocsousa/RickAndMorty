@@ -79,3 +79,4 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+androidLint = { id = "com.android.lint", version.ref = "agp" }

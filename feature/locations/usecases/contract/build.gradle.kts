@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.androidLint)
 }
 
 kotlin {
@@ -9,7 +10,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "xyz.aranhapreta.feature.characters.usecases.contract"
+        namespace = "xyz.aranhapreta.feature.locations.usecases.contract"
         compileSdk = 35
         minSdk = 24
     }
@@ -21,7 +22,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:locations:usecases:contractKit"
+    val xcfName = "featureLocationsUsecasesContractKit"
 
     iosX64 {
         binaries.framework {
@@ -56,7 +57,7 @@ kotlin {
         androidMain {
             dependencies {
                 // Add Android-specific dependencies here. Note that this source set depends on
-                // commonMain by default and will correctly pull the Android artifacts of any KMP
+                // commonMain by default and and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
             }
         }

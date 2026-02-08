@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.androidLint)
 }
 
 kotlin {
@@ -21,7 +22,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:locations:usecases:implKit"
+    val xcfName = "locationsUsecasesImplKit"
 
     iosX64 {
         binaries.framework {
@@ -49,6 +50,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":feature:locations:usecases:contract"))
+                implementation(project(":feature:locations:entities"))
+                implementation(project(":feature:locations:api:contract"))
             }
         }
 

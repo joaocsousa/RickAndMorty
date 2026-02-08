@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.androidLint)
 }
 
 kotlin {
@@ -21,7 +22,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "feature:episodes:usecases:implKit"
+    val xcfName = "featureEpisodesUsecasesImplKit"
 
     iosX64 {
         binaries.framework {
@@ -49,6 +50,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":feature:episodes:usecases:contract"))
+                implementation(project(":feature:episodes:entities"))
+                implementation(project(":feature:episodes:api:contract"))
             }
         }
 
