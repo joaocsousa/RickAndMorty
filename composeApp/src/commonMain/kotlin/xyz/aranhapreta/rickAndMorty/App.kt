@@ -38,10 +38,10 @@ import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
-import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.CharactersScreen
 import xyz.aranhapreta.feature.episodes.presentation.EpisodesScreen
 import xyz.aranhapreta.feature.locations.presentation.LocationsScreen
 import xyz.aranhapreta.rickAndMorty.di.Koin
+import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.CharactersScreen
 import xyz.aranhapreta.theme.AppTheme
 
 @OptIn(ExperimentalHazeMaterialsApi::class, ExperimentalMaterial3Api::class)
@@ -60,7 +60,7 @@ fun App() {
             Scaffold(
                 topBar = {
                     CenterAlignedTopAppBar(
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                         modifier = Modifier
                             .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin())
                             .fillMaxWidth(),

@@ -9,7 +9,7 @@ import rickandmorty.theme.generated.resources.exo_two_variable
 import rickandmorty.theme.generated.resources.orbitron_variable
 
 @Composable
-fun appTypography(): Typography {
+internal fun appTypography(): Typography {
     val baseline = Typography()
     val displayFontFamily = FontFamily(
         Font(resource = Res.font.orbitron_variable)

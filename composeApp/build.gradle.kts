@@ -15,13 +15,13 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            freeCompilerArgs += "-Xbinary=bundleId=xyz.aranhapreta.rickAndMorty"
         }
     }
 
@@ -79,11 +79,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
 }

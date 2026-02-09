@@ -33,12 +33,6 @@ kotlin {
     // https://developer.android.com/kotlin/multiplatform/migrate
     val xcfName = "commonDatabaseTestKit"
 
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
-
     iosArm64 {
         binaries.framework {
             baseName = xcfName
@@ -57,13 +51,6 @@ kotlin {
     // common to share sources between related targets.
     // See: https://kotlinlang.org/docs/multiplatform-hierarchy.html
     sourceSets {
-        commonMain {
-            dependencies {
-                implementation(libs.kotlin.stdlib)
-                // Add KMP dependencies here
-            }
-        }
-
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)

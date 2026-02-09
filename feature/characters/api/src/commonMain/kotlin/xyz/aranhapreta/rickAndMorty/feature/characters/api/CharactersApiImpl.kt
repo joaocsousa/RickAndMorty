@@ -20,7 +20,7 @@ internal class CharactersApiImpl(
         }.onSuccess {
             Logger.i { "Received ${it.results.size} characters" }
         }.onFailure {
-            Logger.w(throwable = it) { "error getting characters" }
+            Logger.w(throwable = it) { "error getting characters for page $page" }
         }
     }
 

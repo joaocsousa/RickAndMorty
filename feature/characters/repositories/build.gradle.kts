@@ -16,7 +16,6 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -34,6 +33,7 @@ kotlin {
                 implementation(libs.koin)
                 implementation(libs.kermit)
                 implementation(libs.coroutines)
+                implementation(libs.androidx.paging.common)
             }
         }
 

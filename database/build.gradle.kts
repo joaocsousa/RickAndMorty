@@ -16,7 +16,6 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -26,7 +25,6 @@ kotlin {
     }
 
     sourceSets {
-        androidUnitTest
         commonMain {
             dependencies {
                 implementation(libs.coroutines)

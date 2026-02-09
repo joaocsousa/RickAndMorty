@@ -13,6 +13,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    includeBuild("build-logic")
 }
 
 dependencyResolutionManagement {
@@ -29,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.1"
+    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.6"
 }
 
 kover {
@@ -51,7 +52,6 @@ include(":feature:episodes:presentation")
 include(":feature:episodes:usecases:contract")
 include(":feature:episodes:usecases:impl")
 include(":feature:episodes:entities")
-
 include(":feature:locations:api:contract")
 include(":feature:locations:api:impl")
 include(":feature:locations:presentation")
