@@ -10,22 +10,21 @@ androidx-activity = "1.12.3"
 androidx-core = "1.17.0"
 androidx-espresso = "3.7.0"
 androidx-lifecycle = "2.9.6"
-androidx-navigation = "2.9.1"
+androidx-navigation = "2.9.2"
 androidx-test-core = "1.7.0"
 androidx-testExt = "1.3.0"
 androidx-test-runner = "1.7.0"
 androidx-paging = "3.4.0"
-composeMultiplatform = "1.10.0"
+composeMultiplatform = "1.10.1"
 junit = "4.13.2"
 kotlin-serialization = "1.10.0"
-kover = "0.9.6"
 ktor = "3.4.0"
 kermit = "2.0.8"
 koin = "4.1.1"
 buildKonfig = "0.17.1"
 coroutines = "1.10.2"
 coil = "3.3.0"
-haze = "1.7.1"
+haze = "1.7.2"
 icons = "1.7.3"
 sqldelight = "2.2.1"
 turbine = "1.2.1"
@@ -41,6 +40,7 @@ compose-gradlePlugin = { module = "org.jetbrains.compose:compose-gradle-plugin",
 compose-compiler-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 ktlint-gradlePlugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -78,7 +78,7 @@ sqlite-android = { module = "app.cash.sqldelight:android-driver", version.ref = 
 sqlite-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqlite-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-compose-rules"}
+ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-compose-rules" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -86,7 +86,6 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kover = { id = "org.jetbrains.kotlinx.kover.aggregation", version.ref = "kover" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }

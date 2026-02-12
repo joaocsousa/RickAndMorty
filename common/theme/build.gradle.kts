@@ -4,6 +4,6 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "xyz.aranhapreta.feature.locations.presentation"
+        namespace = "xyz.aranhapreta.rickAndMorty.theme"
     }
 }

@@ -10,49 +10,12 @@ java {
 }
 
 dependencies {
-    compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.android.tools.common)
-    compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.compose.gradlePlugin)
-    compileOnly(libs.compose.compiler.gradlePlugin)
-    compileOnly(libs.ksp.gradlePlugin)
-
+    implementation(libs.android.gradlePlugin)
+    implementation(libs.android.tools.common)
+    implementation(libs.kotlin.gradlePlugin)
+    implementation(libs.compose.gradlePlugin)
+    implementation(libs.compose.compiler.gradlePlugin)
+    implementation(libs.ksp.gradlePlugin)
     implementation(libs.ktlint.gradlePlugin)
-}
-
-gradlePlugin {
-    plugins {
-        register("android-application") {
-            id = "convention.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
-        }
-        register("androidKmpLibrary") {
-            id = "convention.android.kmp.library"
-            implementationClass = "AndroidLibraryKmpConventionPlugin"
-        }
-        register("androidLibrary") {
-            id = "convention.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
-        }
-        register("kotlinMultiplatform") {
-            id = "convention.kotlin.multiplatform"
-            implementationClass = "KotlinMultiplatformConventionPlugin"
-        }
-        register("composeMultiplatform") {
-            id = "convention.compose.multiplatform"
-            implementationClass = "ComposeMultiplatformConventionPlugin"
-        }
-        register("composeAndroid") {
-            id = "convention.compose.android"
-            implementationClass = "ComposeAndroidConventionPlugin"
-        }
-        register("ktlint") {
-            id = "convention.ktlint"
-            implementationClass = "KtlintConventionPlugin"
-        }
-        register("kmpFeature") {
-            id = "convention.kmp.feature"
-            implementationClass = "KmpFeatureConventionPlugin"
-        }
-    }
+    implementation(libs.kotlin.serialization.plugin)
 }

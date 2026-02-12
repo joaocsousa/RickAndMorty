@@ -1,85 +1,43 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import utils.configureAndroidApplication
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    id("composite-convention-cmp-application")
+}
+
+private val BundleId = "xyz.aranhapreta.rickAndMorty"
+
+cmpApplication {
+    baseName.set("RickAndMorty")
+    iosBundleId.set(BundleId)
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-            freeCompilerArgs += "-Xbinary=bundleId=xyz.aranhapreta.rickAndMorty"
-        }
-    }
-
     sourceSets {
-
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(projects.theme)
+            implementation(projects.common.theme)
             implementation(projects.common.di.compose)
-            implementation(projects.database)
+            implementation(projects.common.database)
             implementation(projects.feature.characters.presentation)
             implementation(projects.feature.locations.presentation)
             implementation(projects.feature.episodes.presentation)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.androidx.navigation)
             implementation(libs.coil.ktor)
             implementation(libs.icons)
             implementation(libs.haze)
             implementation(libs.haze.materials)
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
     }
 }
 
 android {
-    namespace = "xyz.aranhapreta.rickAndMorty"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "xyz.aranhapreta.rickAndMorty"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+    namespace = BundleId
+    configureAndroidApplication(this)
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
     }
 }

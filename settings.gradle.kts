@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.6"
+    id("org.jetbrains.kotlinx.kover.aggregation") version "0.9.7"
 }
 
 kover {
@@ -38,29 +38,24 @@ kover {
 }
 
 include(":composeApp")
-include(":api:core")
 
+// feature - characters
 include(":feature:characters:api")
 include(":feature:characters:usecases")
 include(":feature:characters:repositories")
 include(":feature:characters:entities")
 include(":feature:characters:presentation")
 
-include(":feature:episodes:api:contract")
-include(":feature:episodes:api:impl")
+// feature - episodes
 include(":feature:episodes:presentation")
-include(":feature:episodes:usecases:contract")
-include(":feature:episodes:usecases:impl")
-include(":feature:episodes:entities")
-include(":feature:locations:api:contract")
-include(":feature:locations:api:impl")
+
+// feature - locations
 include(":feature:locations:presentation")
-include(":feature:locations:usecases:contract")
-include(":feature:locations:usecases:impl")
-include(":feature:locations:entities")
-include(":api:models:in")
-include(":theme")
-include(":database")
+
+// common
+include(":common:api:core")
+include(":common:api:models:in")
+include(":common:theme")
+include(":common:database")
 include(":common:di:compose")
 include(":common:di:modules")
-include(":common:database-test")
