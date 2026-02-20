@@ -1,7 +1,9 @@
 package xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models
 
-import xyz.aranhapreta.rickAndMorty.feature.characters.entities.Gender
+import androidx.compose.runtime.Stable
+import xyz.aranhapreta.rickAndMorty.feature.characters.domain.entities.Gender
 
+@Stable
 internal sealed interface CharacterGender {
     data object Male : CharacterGender
     data object Female : CharacterGender

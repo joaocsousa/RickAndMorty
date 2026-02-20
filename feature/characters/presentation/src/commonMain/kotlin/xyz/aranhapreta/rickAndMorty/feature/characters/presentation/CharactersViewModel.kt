@@ -2,82 +2,52 @@ package xyz.aranhapreta.rickAndMorty.feature.characters.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import xyz.aranhapreta.rickAndMorty.feature.characters.entities.Character
-import xyz.aranhapreta.rickAndMorty.feature.characters.entities.CharactersLoadingState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import xyz.aranhapreta.rickAndMorty.feature.characters.domain.entities.Character
+import xyz.aranhapreta.rickAndMorty.feature.characters.domain.usecases.ObserveCharacters
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharacterScreenEvent
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharacterScreenEvent.CharacterClicked
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharacterState
-import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharactersScreenState
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.toState
-import xyz.aranhapreta.rickAndMorty.feature.characters.usecases.LoadMoreCharacters
-import xyz.aranhapreta.rickAndMorty.feature.characters.usecases.ObserveAllCharacters
-import xyz.aranhapreta.rickAndMorty.feature.characters.usecases.ObserveCharactersLoadingState
 
 internal class CharactersViewModel(
-    private val observeAllCharacters: ObserveAllCharacters,
-    private val observeCharactersLoadingState: ObserveCharactersLoadingState,
-    private val loadMoreCharacters: LoadMoreCharacters,
+    observeCharacters: ObserveCharacters,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<CharactersScreenState>(CharactersScreenState())
-    val state = _state.stateIn(
-        scope = viewModelScope,
-        initialValue = CharactersScreenState(),
-        started = WhileSubscribed(stopTimeoutMillis = 5000)
-    )
-
     init {
-        viewModelScope.launch {
-            observeAllCharacters.invoke()
-                .onStart { emit(emptyList()) }
-                .combine(observeCharactersLoadingState()) { characters, loadingState ->
-                    characters to loadingState
-                }
-                .collect { (characters, loadingState) ->
-                    Logger.d { "loaded ${characters.size} loadingState = $loadingState" }
-                    _state.value = _state.value.copy(
-                        isLoading = loadingState is CharactersLoadingState.Loading,
-                        characters = characters.toState(),
-                        error = loadingState is CharactersLoadingState.Failed,
-                    )
-                }
-        }
+        Logger.i { "CharactersViewModel initialized" }
     }
+
+    val characters: Flow<PagingData<CharacterState>> = observeCharacters()
+        .map { pagingData ->
+            Logger.d { "ViewModel received new PagingData from the use case." }
+            pagingData.map { character ->
+                character.toState()
+            }
+        }
+        .cachedIn(viewModelScope)
 
     fun onEvent(event: CharacterScreenEvent) {
+        Logger.d { "ViewModel onEvent received: $event" }
         when (event) {
-            is CharacterClicked -> Logger.d { "event $event" }
-            is CharacterScreenEvent.ScrolledTo -> onScrolledTo(event.index)
-        }
-    }
-
-    private fun onScrolledTo(index: Int) {
-        val size = _state.value.characters.size
-        Logger.d { "items = $size" }
-        if (index >= size - 10) {
-            viewModelScope.launch {
-                Logger.d { "load more" }
-                loadMoreCharacters()
+            is CharacterClicked -> {
+                // Handle character click
             }
         }
     }
 
-    private fun List<Character>.toState() = map {
-        CharacterState(
-            id = it.id,
-            name = it.name,
-            imageUrl = it.image,
-            status = it.status.toState(),
-            species = it.species,
-            type = it.type,
-            gender = it.gender.toState(),
-        )
-    }
+    private fun Character.toState() = CharacterState(
+        id = this.id,
+        name = this.name,
+        imageUrl = this.image,
+        status = this.status.toState(),
+        species = this.species,
+        type = this.type,
+        gender = this.gender.toState(),
+    )
 }

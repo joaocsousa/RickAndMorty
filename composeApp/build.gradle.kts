@@ -24,6 +24,7 @@ kotlin {
             implementation(projects.feature.locations.presentation)
             implementation(projects.feature.episodes.presentation)
             implementation(libs.androidx.navigation)
+            implementation(libs.coil)
             implementation(libs.coil.ktor)
             implementation(libs.icons)
             implementation(libs.haze)

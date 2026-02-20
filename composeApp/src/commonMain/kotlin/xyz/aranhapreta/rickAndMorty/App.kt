@@ -33,6 +33,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.request.crossfade
+import coil3.util.DebugLogger
+import coil3.util.Logger
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -47,6 +52,7 @@ import xyz.aranhapreta.theme.AppTheme
 @OptIn(ExperimentalHazeMaterialsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
+    ConfigureCoil()
     Koin {
         AppTheme {
             val navController = rememberNavController()
@@ -108,6 +114,16 @@ fun App() {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ConfigureCoil() {
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .logger(DebugLogger(minLevel = Logger.Level.Verbose))
+            .crossfade(true)
+            .build()
     }
 }
 

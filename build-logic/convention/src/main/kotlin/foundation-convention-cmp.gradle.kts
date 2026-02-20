@@ -3,6 +3,7 @@
  */
 import org.jetbrains.compose.ComposeExtension
 import utils.configureJavaVersion
+import utils.libs
 
 plugins {
     kotlin("multiplatform")
@@ -20,6 +21,6 @@ kotlin {
         implementation(composeDeps.material3)
         implementation(composeDeps.ui)
         implementation(composeDeps.components.resources)
-        implementation(composeDeps.components.uiToolingPreview)
+        implementation(libs.findLibrary("compose-tooling-preview").get())
     }
 }
