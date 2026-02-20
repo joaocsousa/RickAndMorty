@@ -40,10 +40,8 @@ kover {
 include(":composeApp")
 
 // feature - characters
-include(":feature:characters:api")
-include(":feature:characters:usecases")
-include(":feature:characters:repositories")
-include(":feature:characters:entities")
+include(":feature:characters:data")
+include(":feature:characters:domain")
 include(":feature:characters:presentation")
 
 // feature - episodes
@@ -53,8 +51,7 @@ include(":feature:episodes:presentation")
 include(":feature:locations:presentation")
 
 // common
-include(":common:api:core")
-include(":common:api:models:in")
+include(":common:api")
 include(":common:theme")
 include(":common:database")
 include(":common:di:compose")

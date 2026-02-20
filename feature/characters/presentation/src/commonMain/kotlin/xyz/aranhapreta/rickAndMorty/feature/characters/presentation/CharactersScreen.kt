@@ -14,28 +14,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import co.touchlab.kermit.Logger
 import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Regular
+import compose.icons.fontawesomeicons.regular.AddressBook
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import rickandmorty.feature.characters.presentation.generated.resources.Res
@@ -53,67 +55,34 @@ import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.Chara
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharacterScreenEvent
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharacterState
 import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharacterStatus
-import xyz.aranhapreta.rickAndMorty.feature.characters.presentation.models.CharactersScreenState
 
 @Composable
 fun CharactersScreen(contentPadding: PaddingValues) {
+    Logger.i { "CharactersScreen recomposing" }
     val viewModel = koinViewModel<CharactersViewModel>()
-    val state = viewModel.state.collectAsStateWithLifecycle()
-    Content(
-        state = state.value,
+    val characters = viewModel.characters.collectAsLazyPagingItems()
+
+    CharactersList(
+        characters = characters,
         onEvent = viewModel::onEvent,
         contentPadding = contentPadding,
     )
 }
 
 @Composable
-private fun Content(
-    state: CharactersScreenState,
-    onEvent: (CharacterScreenEvent) -> Unit,
-    contentPadding: PaddingValues
-) {
-    when {
-        state.characters.isNotEmpty() -> CharactersList(
-            state = state,
-            onEvent = onEvent,
-            contentPadding = contentPadding,
-        )
-
-        state.isLoading -> Loading()
-        state.error -> Text("ERROR")
-    }
-}
-
-@Composable
-private fun Loading() {
-    Box(
-        modifier = Modifier.fillMaxSize().systemBarsPadding(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
 private fun CharactersList(
-    state: CharactersScreenState,
+    characters: LazyPagingItems<CharacterState>,
     onEvent: (CharacterScreenEvent) -> Unit,
     contentPadding: PaddingValues
 ) {
+    Logger.i { "CharactersList recomposing. Item count: ${characters.itemCount}" }
+    LaunchedEffect(characters.loadState) {
+        Logger.d { "Paging LoadState changed: ${characters.loadState}" }
+    }
+
     val padding = 24.dp
     val topPadding = contentPadding.calculateTopPadding() + padding
     val bottomPadding = contentPadding.calculateBottomPadding() + padding
-    val listState = rememberLazyListState()
-
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo }
-            .map { it.lastOrNull()?.index }
-            .filterNotNull()
-            .distinctUntilChanged()
-            .collect { index ->
-                onEvent(CharacterScreenEvent.ScrolledTo(index))
-            }
-    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -124,29 +93,67 @@ private fun CharactersList(
             end = padding,
             bottom = bottomPadding
         ),
-        state = listState,
     ) {
-        items(state.characters) { item ->
-            CharacterItem(
-                modifier = Modifier.fillMaxWidth(),
-                item = item,
-                onEvent = onEvent,
-            )
-        }
-        if (state.isLoading) {
-            item {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+        items(
+            count = characters.itemCount,
+            key = characters.itemKey { it.id }
+        ) { index ->
+            val item = characters[index]
+            if (item != null) {
+                CharacterItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    item = item,
+                    onEvent = onEvent,
+                )
             }
         }
+
+        // Handle loading states
+        when (characters.loadState.append) {
+            is LoadState.Loading -> {
+                item {
+                    Box(
+                        Modifier.fillMaxWidth().padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
+
+            is LoadState.Error -> {
+                item {
+                    TextButton(
+                        onClick = {},
+                        shape = ButtonDefaults.shape
+                    ) {
+                        Text("Text Button")
+                    }
+                }
+            }
+
+            else -> {}
+        }
+    }
+
+    // Handle initial load state
+    when (val loadState = characters.loadState.refresh) {
+        is LoadState.Loading -> {
+            Box(Modifier.fillMaxSize().systemBarsPadding(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is LoadState.Error -> {
+            Box(Modifier.fillMaxSize().systemBarsPadding(), contentAlignment = Alignment.Center) {
+                Text("Error: ${loadState.error.message}")
+            }
+        }
+
+        else -> {}
     }
 }
+
 
 @Composable
 private fun CharacterItem(
@@ -165,12 +172,10 @@ private fun CharacterItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalPlatformContext.current)
-                    .data(item.imageUrl)
-                    .crossfade(true)
-                    .build(),
+                model = item.imageUrl,
                 modifier = Modifier.size(80.dp).clip(CircleShape),
                 contentDescription = null,
+                error = rememberVectorPainter(FontAwesomeIcons.Regular.AddressBook)
             )
             Column(
                 modifier = Modifier
@@ -203,8 +208,8 @@ private fun genderLabel(gender: CharacterGender): String {
 
 @Composable
 private fun speciesLabel(species: String, type: String): String {
-    val species = listOf(species, type).filter { it.isNotBlank() }.joinToString(", ")
-    return stringResource(Res.string.species_label, species)
+    val speciesLabel = listOf(species, type).filter { it.isNotBlank() }.joinToString(", ")
+    return stringResource(Res.string.species_label, speciesLabel)
 }
 
 @Composable
@@ -226,4 +231,12 @@ private fun CharacterStatus.label(): String {
         CharacterStatus.Unknown -> Res.string.status_unknown
     }
     return stringResource(resource)
+}
+
+@Preview
+@Composable
+private fun asd() {
+    Box(Modifier.fillMaxSize().systemBarsPadding(), contentAlignment = Alignment.Center) {
+        Text("Error: This is a message")
+    }
 }

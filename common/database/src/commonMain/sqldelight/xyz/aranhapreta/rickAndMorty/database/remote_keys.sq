@@ -1,0 +1,13 @@
+CREATE TABLE remoteKey (
+    type TEXT PRIMARY KEY NOT NULL,
+    nextKey INTEGER
+);
+
+insertKey:
+INSERT OR REPLACE INTO remoteKey (type, nextKey) VALUES (?, ?);
+
+getRemoteKeyByType:
+SELECT * FROM remoteKey WHERE type = ?;
+
+clearAll:
+DELETE FROM remoteKey;

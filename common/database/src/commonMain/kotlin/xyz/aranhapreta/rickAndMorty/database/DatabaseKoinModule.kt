@@ -15,4 +15,10 @@ val databaseKoinModule = module {
     factory<CharactersDao> {
         CharactersDaoImpl(database = get(), ioDispatcher = Dispatchers.IO)
     }
+    factory<RemoteKeysDao> {
+        RemoteKeysDaoImpl(
+            database = get(),
+            ioDispatcher = Dispatchers.IO
+        )
+    }
 }

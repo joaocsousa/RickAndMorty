@@ -13,6 +13,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.sqlite.coroutines)
+                implementation(libs.androidx.paging.common)
             }
         }
 
