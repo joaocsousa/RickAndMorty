@@ -1,8 +1,8 @@
 [versions]
-kotlin = "2.2.21"
+kotlin = "2.3.10"
 ksp = "2.2.21-2.0.4"
 android-tools-common = "32.0.1"
-agp = "8.13.2"
+agp = "9.0.1"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
@@ -31,6 +31,8 @@ turbine = "1.2.1"
 ktlint = "14.0.1"
 ktlint-compose-rules = "0.5.6"
 compose-icons = "2.0.0"
+appcompat = "1.7.1"
+material = "1.13.0"
 
 [libraries]
 # Gradle Plugins for build-logic
@@ -84,6 +86,8 @@ ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref 
 compose-icons-fontAwesome = { module = "com.github.joaocsousa:font-awesome", version.ref = "compose-icons" }
 compose-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 compose-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

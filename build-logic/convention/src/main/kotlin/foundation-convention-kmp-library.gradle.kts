@@ -29,7 +29,9 @@ kotlin {
 
     iosTargets().forEach {
         it.binaries.framework {
-            baseName = project.name
+            baseName = project.name.also { projectName ->
+                println("==>${projectName}")
+            }
             isStatic = true
         }
     }

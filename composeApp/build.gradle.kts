@@ -1,25 +1,15 @@
-import utils.configureAndroidApplication
-
 plugins {
-    id("composite-convention-cmp-application")
-}
-
-private val BundleId = "xyz.aranhapreta.rickAndMorty"
-
-cmpApplication {
-    baseName.set("RickAndMorty")
-    iosBundleId.set(BundleId)
+    id("composite-convention-cmp-library")
 }
 
 kotlin {
+    androidLibrary {
+        namespace = "xyz.aranhapreta.rickAndMorty.composeApp"
+    }
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-        }
         commonMain.dependencies {
             implementation(projects.common.theme)
             implementation(projects.common.di.compose)
-            implementation(projects.common.database)
             implementation(projects.feature.characters.presentation)
             implementation(projects.feature.locations.presentation)
             implementation(projects.feature.episodes.presentation)
@@ -29,16 +19,6 @@ kotlin {
             implementation(libs.icons)
             implementation(libs.haze)
             implementation(libs.haze.materials)
-        }
-    }
-}
-
-android {
-    namespace = BundleId
-    configureAndroidApplication(this)
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
         }
     }
 }
